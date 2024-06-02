@@ -43,9 +43,9 @@ class EventosActivity : AppCompatActivity(){
     override fun onStart() {
         super.onStart()
         enlace3.imagenEventos.setOnClickListener {
-            val inicio= Intent(this,HomeActivity::class.java)
-            //finishAffinity()
-            startActivity(inicio)
+            //val inicio= Intent(this,HomeActivity::class.java)
+            finish()
+
         }
     }
 

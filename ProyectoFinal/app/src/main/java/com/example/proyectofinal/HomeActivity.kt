@@ -1,5 +1,6 @@
 package com.example.proyectofinal
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,7 +13,8 @@ import com.example.proyectofinal.view.EventosActivity
 import com.google.firebase.auth.FirebaseAuth
 
 enum class ProviderType{
-    USUARIO
+    USUARIO,
+    GOOGLE
 }
 
 class HomeActivity : AppCompatActivity() {
@@ -33,6 +35,12 @@ class HomeActivity : AppCompatActivity() {
         val email:String? = bundle?.getString("email")
         val provider:String? = bundle?.getString("provider")
         setup(email?: "", provider?:"")
+
+        //Guardar datos, persistencia de datos aunque se detenga nuestra app
+        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+        prefs.putString("email", email)
+        prefs.putString("provider", provider)
+        prefs.apply()
     }
 
     override fun onStart() {
@@ -52,6 +60,16 @@ class HomeActivity : AppCompatActivity() {
             val siguiente= Intent(this,EventosActivity::class.java)
             startActivity(siguiente)
         }
+
+        enlace2.btnReservarEntradas.setOnClickListener {
+            val pantallaCompra = Intent(this, ReservarEntradaActivity::class.java)
+            startActivity(pantallaCompra)
+        }
+
+        enlace2.btnMisReservas.setOnClickListener {
+            val misReservas = Intent(this, MostrarReservasActivity::class.java)
+            startActivity(misReservas)
+        }
     }
 
     private fun setup(email:String, provider:String){
@@ -60,6 +78,10 @@ class HomeActivity : AppCompatActivity() {
         enlace2.ProviderTextView.text = provider
 
         enlace2.logOutButton.setOnClickListener {
+            val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+            prefs.clear()
+            prefs.apply()
+
             FirebaseAuth.getInstance().signOut()
             onBackPressed()
         }
