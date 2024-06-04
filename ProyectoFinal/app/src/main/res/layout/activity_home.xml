@@ -38,17 +38,17 @@
 
     <Button
         android:id="@+id/logOutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="175dp"
+        android:layout_height="49dp"
         android:layout_weight="1"
-        android:backgroundTint="#BF7A7A"
+        android:backgroundTint="#E91E63"
         android:text="Cerrar Sesion"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.906"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.948" />
+        app:layout_constraintVertical_bias="0.498" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -97,32 +97,40 @@
         android:id="@+id/btnProximosPartidos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#43CC49"
+        android:backgroundTint="#558851"
         android:text="Proximos Partidos"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.065"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.383" />
 
     <Button
         android:id="@+id/btnMisReservas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FF9800"
+        android:layout_width="170dp"
+        android:layout_height="48dp"
+        android:backgroundTint="#558851"
         android:text="Ver mis Reservas"
-        app:layout_constraintEnd_toEndOf="@+id/btnProximosPartidos"
-        app:layout_constraintStart_toStartOf="@+id/btnProximosPartidos"
-        app:layout_constraintTop_toBottomOf="@+id/btnProximosPartidos" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.908"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.383" />
 
     <Button
         android:id="@+id/btnReservarEntradas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#43CC49"
+        android:backgroundTint="#558851"
         android:text="Reservar Entradas"
-        app:layout_constraintEnd_toEndOf="@+id/btnMisReservas"
-        app:layout_constraintStart_toStartOf="@+id/btnMisReservas"
-        app:layout_constraintTop_toBottomOf="@+id/btnMisReservas" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.069"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 
     <Button
         android:id="@+id/btnEnviarCorreo"
@@ -130,8 +138,11 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#9C27B0"
         android:text="Enviar Correo a la Organizacion"
-        app:layout_constraintEnd_toEndOf="@+id/btnReservarEntradas"
-        app:layout_constraintStart_toStartOf="@+id/btnReservarEntradas"
-        app:layout_constraintTop_toBottomOf="@+id/btnReservarEntradas" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.591" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
