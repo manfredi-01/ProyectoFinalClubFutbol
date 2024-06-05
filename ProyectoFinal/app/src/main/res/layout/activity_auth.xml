@@ -22,8 +22,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="390dp"
-            android:layout_height="338dp"
+            android:layout_width="match_parent"
+            android:layout_height="304dp"
             app:srcCompat="@drawable/logoaplicacion" />
 
         <EditText
@@ -87,8 +87,8 @@
 
     <TextView
         android:id="@+id/textoInformativo"
-        android:layout_width="379dp"
-        android:layout_height="48dp"
+        android:layout_width="380dp"
+        android:layout_height="63dp"
         android:text="SI no estas registrado introduce los datos y pulsa &quot;Registrar, si ya estas registrado introduce los datos y pulsa &quot;Entrar&quot;."
         android:textAlignment="center"
         android:textColor="#6276E1"
@@ -97,6 +97,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85" />
+        app:layout_constraintVertical_bias="0.803" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

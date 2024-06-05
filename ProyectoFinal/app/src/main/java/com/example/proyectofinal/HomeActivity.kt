@@ -46,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         enlace2.btnEnviarCorreo.setOnClickListener {
-            var direccion: String="rmanfredi2001@gmail.com"
+            var direccion: String=""
             var asunto: String="Entradas"
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:rmanfredi2001@gmail.com")

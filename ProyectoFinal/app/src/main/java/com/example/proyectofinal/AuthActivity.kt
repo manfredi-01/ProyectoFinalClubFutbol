@@ -38,7 +38,7 @@ class AuthActivity : AppCompatActivity() {
         //
 
         //Setup
-        setup()
+        //setup()
         sesion()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -52,34 +52,36 @@ class AuthActivity : AppCompatActivity() {
         super.onStart()
 
         enlace.authLayout.visibility = View.VISIBLE
-    }
 
-    private fun sesion(){
-        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-        val email = prefs.getString("email", null)
-        val provider = prefs.getString("provider", null)
 
-        if(email !=null && provider != null){
-            enlace.authLayout.visibility = View.INVISIBLE
-            showHome(email, ProviderType.valueOf(provider))
-        }
-    }
-    private fun setup(){
-        title = "Atenticacion"
         enlace.singUpButton.setOnClickListener {
             if (enlace.emailEditText.text.isNotEmpty() && enlace.passwordEditText.text.isNotEmpty()){
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(enlace.emailEditText.text.toString(), enlace.passwordEditText.toString()).addOnCompleteListener {
                     if(it.isSuccessful){
+                        //Para viajar a la pantalla de menu
                         showHome(it.result?.user?.email ?: "", ProviderType.USUARIO)
                     }else{
-                      showAlert()
+                        showAlert()
                     }
                 }
             }
         }
 
+        ////////////////////////
+        //PARA INTENTAR FALSEAR
+        //val homeIntent = Intent(this, HomeActivity::class.java)
+        ////////////////////////
+
+        //Boton para entrar a la aplicacion
         enlace.logInButton.setOnClickListener {
             if (enlace.emailEditText.text.isNotEmpty() && enlace.passwordEditText.text.isNotEmpty()){
+
+                ////////////////////////
+                //PARA INTENTAR FALSEAR
+                //startActivity(homeIntent)
+                ////////////////////////
+
+                showHome(enlace.emailEditText.text.toString(), ProviderType.USUARIO)
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(enlace.emailEditText.text.toString(), enlace.passwordEditText.toString()).addOnCompleteListener {
                     if(it.isSuccessful){
                         showHome(it.result?.user?.email ?: "", ProviderType.USUARIO)
@@ -93,7 +95,7 @@ class AuthActivity : AppCompatActivity() {
         enlace.btnGoogle.setOnClickListener {
             //Configuracion de autenticacion con google
             val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))/**//**//**//**//**/
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
 
@@ -103,6 +105,71 @@ class AuthActivity : AppCompatActivity() {
             startActivityForResult(googleClient.signInIntent, GOOGLE_SIGN_IN)
         }
     }
+
+    private fun sesion(){
+        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val email = prefs.getString("email", null)
+        val provider = prefs.getString("provider", null)
+
+        if(email !=null && provider != null){
+            enlace.authLayout.visibility = View.INVISIBLE
+            showHome(email, ProviderType.valueOf(provider))
+        }
+    }
+    /*private fun setup(){
+        title = "Atenticacion"
+
+        enlace.singUpButton.setOnClickListener {
+            if (enlace.emailEditText.text.isNotEmpty() && enlace.passwordEditText.text.isNotEmpty()){
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(enlace.emailEditText.text.toString(), enlace.passwordEditText.toString()).addOnCompleteListener {
+                    if(it.isSuccessful){
+                        //Para viajar a la pantalla de menu
+                        showHome(it.result?.user?.email ?: "", ProviderType.USUARIO)
+                    }else{
+                      showAlert()
+                    }
+                }
+            }
+        }
+
+        ////////////////////////
+        //PARA INTENTAR FALSEAR
+        //val homeIntent = Intent(this, HomeActivity::class.java)
+        ////////////////////////
+
+        //Boton para entrar a la aplicacion
+        enlace.logInButton.setOnClickListener {
+            if (enlace.emailEditText.text.isNotEmpty() && enlace.passwordEditText.text.isNotEmpty()){
+
+                ////////////////////////
+                //PARA INTENTAR FALSEAR
+                //startActivity(homeIntent)
+                ////////////////////////
+
+                showHome(enlace.emailEditText.text.toString(), ProviderType.USUARIO)
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(enlace.emailEditText.text.toString(), enlace.passwordEditText.toString()).addOnCompleteListener {
+                    if(it.isSuccessful){
+                        showHome(it.result?.user?.email ?: "", ProviderType.USUARIO)
+                    }else{
+                        showAlert()
+                    }
+                }
+            }
+        }
+
+        enlace.btnGoogle.setOnClickListener {
+            //Configuracion de autenticacion con google
+            val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))*//**//**//**//**//**//**//**//**//**//*
+                .requestEmail()
+                .build()
+
+            val googleClient = GoogleSignIn.getClient(this, googleConf)
+            googleClient.signOut()
+
+            startActivityForResult(googleClient.signInIntent, GOOGLE_SIGN_IN)
+        }
+    }*/
 
     private fun showAlert(){
         val builder = AlertDialog.Builder(this)
