@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,12 +18,15 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import java.security.Provider
 
 class AuthActivity : AppCompatActivity() {
     lateinit var enlace:ActivityAuthBinding
 
     private val GOOGLE_SIGN_IN = 100
+
+    private val bbdd = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,41 +59,12 @@ class AuthActivity : AppCompatActivity() {
 
 
         enlace.singUpButton.setOnClickListener {
-            if (enlace.emailEditText.text.isNotEmpty() && enlace.passwordEditText.text.isNotEmpty()){
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(enlace.emailEditText.text.toString(), enlace.passwordEditText.toString()).addOnCompleteListener {
-                    if(it.isSuccessful){
-                        //Para viajar a la pantalla de menu
-                        showHome(it.result?.user?.email ?: "", ProviderType.USUARIO)
-                    }else{
-                        showAlert()
-                    }
-                }
-            }
+            registrarNuevo()
         }
-
-        ////////////////////////
-        //PARA INTENTAR FALSEAR
-        //val homeIntent = Intent(this, HomeActivity::class.java)
-        ////////////////////////
 
         //Boton para entrar a la aplicacion
         enlace.logInButton.setOnClickListener {
-            if (enlace.emailEditText.text.isNotEmpty() && enlace.passwordEditText.text.isNotEmpty()){
-
-                ////////////////////////
-                //PARA INTENTAR FALSEAR
-                //startActivity(homeIntent)
-                ////////////////////////
-
-                showHome(enlace.emailEditText.text.toString(), ProviderType.USUARIO)
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(enlace.emailEditText.text.toString(), enlace.passwordEditText.toString()).addOnCompleteListener {
-                    if(it.isSuccessful){
-                        showHome(it.result?.user?.email ?: "", ProviderType.USUARIO)
-                    }else{
-                        showAlert()
-                    }
-                }
-            }
+            logIn()
         }
 
         enlace.btnGoogle.setOnClickListener {
@@ -106,6 +81,63 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
+    private fun registrarNuevo(){
+        var contraseña : String
+        var correo : String
+
+        if (enlace.emailEditText.text.isNotEmpty() && enlace.passwordEditText.text.isNotEmpty()){
+
+            bbdd.collection("usuarios").document(enlace.emailEditText.text.toString()).get().addOnSuccessListener {
+                correo = ((it.get("correoBD") as String?).toString())
+                contraseña = ((it.get("contraseñaBD") as String?).toString())
+
+                //Comprobamos que no se repita ningun usuario
+                if(correo==enlace.emailEditText.text.toString() && contraseña==enlace.passwordEditText.text.toString()){
+                    Toast.makeText(this,"Nombre de usuario ya registrado", Toast.LENGTH_SHORT).show()
+                }else{
+                    bbdd.collection("usuarios").document(enlace.emailEditText.text.toString()).set(
+                        hashMapOf("correoBD" to enlace.emailEditText.text.toString(),
+                            "contraseñaBD" to enlace.passwordEditText.text.toString())
+                    )
+                    showHome(enlace.emailEditText.text.toString(), ProviderType.USUARIO)
+                    /*Toast.makeText(this,"Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
+                    val homeIntent = Intent(this, HomeActivity::class.java)
+                    startActivity(homeIntent)*/
+                }
+            }
+        }else{
+            showAlertCamposVacios()
+        }
+
+    }
+
+    private fun logIn(){
+        var contraseña : String
+        var correo : String
+
+        if (enlace.emailEditText.text.isNotEmpty() && enlace.passwordEditText.text.isNotEmpty()){
+
+            bbdd.collection("usuarios").document(enlace.emailEditText.text.toString()).get().addOnSuccessListener {
+                correo = ((it.get("correoBD") as String?).toString())
+                contraseña = ((it.get("contraseñaBD") as String?).toString())
+
+                //Comprobamos si el valor de los campos coincide con nuestra base de datos
+                if(correo==enlace.emailEditText.text.toString() && contraseña==enlace.passwordEditText.text.toString()){
+                    showHome(enlace.emailEditText.text.toString(), ProviderType.USUARIO)
+
+                    /*val homeIntent = Intent(this, HomeActivity::class.java)
+                    startActivity(homeIntent)*/
+                }else{
+                    Toast.makeText(this,"Usuario o contraseña incorrecto", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+        }else{
+            showAlertCamposVacios()
+        }
+
+    }
+
     private fun sesion(){
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val email = prefs.getString("email", null)
@@ -116,6 +148,7 @@ class AuthActivity : AppCompatActivity() {
             showHome(email, ProviderType.valueOf(provider))
         }
     }
+
     /*private fun setup(){
         title = "Atenticacion"
 
@@ -175,6 +208,16 @@ class AuthActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
         builder.setMessage("Se ha producido un error autenticando al usuario")
+        builder.setPositiveButton("Aceptar", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
+    //Aviso de campos vacios
+    private fun showAlertCamposVacios(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Error")
+        builder.setMessage("Se ha producido un error, debe de completar todos los campos")
         builder.setPositiveButton("Aceptar", null)
         val dialog: AlertDialog = builder.create()
         dialog.show()
